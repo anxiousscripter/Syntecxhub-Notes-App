@@ -10,6 +10,7 @@ function App() {
 	const [noteTitle, setNoteTitle] = useState('');
 	const [noteContent, setNoteContent] = useState('');
 	const [isCreating, setIsCreating] = useState(false);
+	const [editingNoteId, setEditingNoteId] = useState(null);
 
 	const titleInputRef = useRef(null);
 
@@ -30,16 +31,39 @@ function App() {
 			return;
 		}
 
-		const newNote = {
-			id: crypto.randomUUID(),
-			title: noteTitle.trim() || 'Untitled Note',
-			content: noteContent.trim(),
-		};
+		if (editingNoteId !== null) {
+			setNotes((currentNotes) =>
+				currentNotes.map((note) =>
+					note.id === editingNoteId
+						? {
+								...note,
+								title: noteTitle.trim() || 'Untitled Note',
+								content: noteContent.trim(),
+							}
+						: note,
+				),
+			);
+		} else {
+			const newNote = {
+				id: crypto.randomUUID(),
+				title: noteTitle.trim() || 'Untitled Note',
+				content: noteContent.trim(),
+			};
 
-		setNotes((currentNotes) => [...currentNotes, newNote]);
+			setNotes((currentNotes) => [...currentNotes, newNote]);
+		}
+
 		setNoteTitle('');
 		setNoteContent('');
+		setEditingNoteId(null);
 		setIsCreating(false);
+	}
+
+	function editNote(note) {
+		setNoteTitle(note.title);
+		setNoteContent(note.content);
+		setEditingNoteId(note.id);
+		setIsCreating(true);
 	}
 
 	function deleteNote(id) {
@@ -72,13 +96,16 @@ function App() {
 						onChange={(event) => setNoteContent(event.target.value)}
 					/>
 
-					<button type="submit">Save Note</button>
+					<button type="submit">
+						{editingNoteId !== null ? 'Save Changes' : 'Save Note'}
+					</button>
 
 					<button
 						type="button"
 						onClick={() => {
 							setNoteTitle('');
 							setNoteContent('');
+							setEditingNoteId(null);
 							setIsCreating(false);
 						}}>
 						Cancel
@@ -99,6 +126,12 @@ function App() {
 							<article className="note-card" key={note.id}>
 								<h3>{note.title}</h3>
 								<p>{note.content}</p>
+
+								<button
+									type="button"
+									onClick={() => editNote(note)}>
+									Edit
+								</button>
 
 								<button
 									type="button"
