@@ -64,15 +64,24 @@
 
 .note-card h3 {
 	margin-top: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
 
 .note-card p {
 	white-space: pre-wrap;
 	line-height: 1.5;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
 
 .note-card button {
 	margin-top: 12px;
+	margin-right: 0.8rem;
 }
 
 .empty-message {
