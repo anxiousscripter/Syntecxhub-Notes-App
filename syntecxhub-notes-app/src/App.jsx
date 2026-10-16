@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
 	const [notes, setNotes] = useState([]);
 	const [noteTitle, setNoteTitle] = useState('');
 	const [noteContent, setNoteContent] = useState('');
+	const [isCreating, setIsCreating] = useState(false);
+
+	const titleInputRef = useRef(null);
+
+	useEffect(() => {
+		if (isCreating) {
+			titleInputRef.current.focus();
+		}
+	}, [isCreating]);
 
 	function createNote(event) {
 		event.preventDefault();
@@ -20,9 +29,9 @@ function App() {
 		};
 
 		setNotes((currentNotes) => [...currentNotes, newNote]);
-
 		setNoteTitle('');
 		setNoteContent('');
+		setIsCreating(false);
 	}
 
 	function deleteNote(id) {
@@ -35,22 +44,39 @@ function App() {
 		<main className="notes-app">
 			<h1>My Notes</h1>
 
-			<form onSubmit={createNote} className="note-form">
-				<input
-					type="text"
-					placeholder="Note title"
-					value={noteTitle}
-					onChange={(event) => setNoteTitle(event.target.value)}
-				/>
+			{!isCreating ? (
+				<button type="button" onClick={() => setIsCreating(true)}>
+					Create Note
+				</button>
+			) : (
+				<form onSubmit={createNote} className="note-form">
+					<input
+						ref={titleInputRef}
+						type="text"
+						placeholder="Note title"
+						value={noteTitle}
+						onChange={(event) => setNoteTitle(event.target.value)}
+					/>
 
-				<textarea
-					placeholder="Write your note..."
-					value={noteContent}
-					onChange={(event) => setNoteContent(event.target.value)}
-				/>
+					<textarea
+						placeholder="Write your note..."
+						value={noteContent}
+						onChange={(event) => setNoteContent(event.target.value)}
+					/>
 
-				<button type="submit">Create Note</button>
-			</form>
+					<button type="submit">Save Note</button>
+
+					<button
+						type="button"
+						onClick={() => {
+							setNoteTitle('');
+							setNoteContent('');
+							setIsCreating(false);
+						}}>
+						Cancel
+					</button>
+				</form>
+			)}
 
 			<section className="notes-list">
 				<h2>All Notes ({notes.length})</h2>
