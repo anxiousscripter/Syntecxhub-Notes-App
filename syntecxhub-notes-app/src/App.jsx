@@ -2,7 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
-	const [notes, setNotes] = useState([]);
+	const [notes, setNotes] = useState(() => {
+		const savedNotes = localStorage.getItem('notes');
+
+		return savedNotes ? JSON.parse(savedNotes) : [];
+	});
 	const [noteTitle, setNoteTitle] = useState('');
 	const [noteContent, setNoteContent] = useState('');
 	const [isCreating, setIsCreating] = useState(false);
@@ -14,6 +18,10 @@ function App() {
 			titleInputRef.current.focus();
 		}
 	}, [isCreating]);
+
+	useEffect(() => {
+		localStorage.setItem('notes', JSON.stringify(notes));
+	}, [notes]);
 
 	function createNote(event) {
 		event.preventDefault();
