@@ -1,0 +1,80 @@
+#root {
+	width: 100%;
+	min-height: 100vh;
+}
+
+.notes-app {
+	width: min(900px, 90%);
+	margin: 0 auto;
+	padding: 40px 0;
+}
+
+.notes-app h1 {
+	margin-bottom: 24px;
+}
+
+.note-form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 40px;
+}
+
+.note-form input,
+.note-form textarea {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font: inherit;
+}
+
+.note-form textarea {
+	min-height: 150px;
+	resize: vertical;
+}
+
+.notes-app button {
+	align-self: flex-start;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 6px;
+	background: #333;
+	color: white;
+	font: inherit;
+	cursor: pointer;
+}
+
+.notes-app button:hover {
+	background: #555;
+}
+
+.notes-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 16px;
+}
+
+.note-card {
+	overflow-wrap: anywhere;
+	padding: 18px;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+}
+
+.note-card h3 {
+	margin-top: 0;
+}
+
+.note-card p {
+	white-space: pre-wrap;
+	line-height: 1.5;
+}
+
+.note-card button {
+	margin-top: 12px;
+}
+
+.empty-message {
+	color: #777;
+}
